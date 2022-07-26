@@ -1,5 +1,7 @@
-﻿using HotelListing.Contracts;
+﻿using AutoMapper;
+using HotelListing.Contracts;
 using HotelListing.Models.ApiUser;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +12,14 @@ namespace HotelListing.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAuthManager _authManager;
+        private readonly IMapper _mapper;
+        private readonly IApiUsersRepository _apiUsersRepository;
 
-        public AccountController(IAuthManager authManager)
+        public AccountController(IAuthManager authManager, IMapper mapper, IApiUsersRepository apiUsersRepository)
         {
             this._authManager = authManager;
+            this._mapper = mapper;
+            this._apiUsersRepository = apiUsersRepository;
         }
 
         // api/Account/register
@@ -67,6 +73,33 @@ namespace HotelListing.Controllers
                 return Unauthorized();
             }
             return Ok(authResponse);
+        }
+
+        // GET: api/Countries
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<IEnumerable<GetApiUserDto>>> GetApiUsers()
+        {
+            var apiUsers = await _apiUsersRepository.GetAllAsync();
+            var apiUsersDto = _mapper.Map<List<GetApiUserDto>>(apiUsers);
+            return Ok(apiUsersDto);
+        }
+
+        // GET: api/Countries/5
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<GetApiUserDetails>> GetApiUser(string id)
+        {
+            var apiUser = await _apiUsersRepository.GetDetails(id);
+
+            if (apiUser == null)
+            {
+                return NotFound();
+            }
+
+            var apiUserDto = _mapper.Map<GetApiUserDetails>(apiUser);
+
+            return Ok(apiUserDto);
         }
     }
 }
