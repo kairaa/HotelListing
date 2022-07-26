@@ -12,5 +12,7 @@ namespace HotelListing.Models.Hotel
         public double Rating { get; set; }
         [Required]
         public int CountryId { get; set; }
+        [Required]
+        public string ApiUserId { get; set; }
     }
 }

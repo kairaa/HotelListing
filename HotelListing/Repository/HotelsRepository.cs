@@ -15,8 +15,8 @@ namespace HotelListing.Repository
 
         public async Task<Hotel> GetDetails(int id)
         {
-            return await _context.Hotels.Include(q => q.Country).
-                FirstOrDefaultAsync(q => q.Id == id);
+            return await _context.Hotels.Include(q => q.Country).Include(q => q.ApiUser)
+                .FirstOrDefaultAsync(q => q.Id == id);
         }
     }
 }

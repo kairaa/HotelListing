@@ -12,5 +12,9 @@ namespace HotelListing.Data
         [ForeignKey(nameof(CountryId))]
         public int CountryId { get; set; }
         public Country Country { get; set; }
+
+        [ForeignKey(nameof(ApiUserId))]
+        public string ApiUserId { get; set; }
+        public ApiUser ApiUser { get; set; }
     }
 }
