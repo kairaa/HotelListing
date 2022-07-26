@@ -92,10 +92,10 @@ namespace HotelListing.Repository
                     UserID = _user.Id,
                     RefreshToken = await CreateRefreshToken()
                 };
-
-                await _userManager.UpdateSecurityStampAsync(_user);
-                return null;
             }
+
+            await _userManager.UpdateSecurityStampAsync(_user);
+            return null;
         }
 
         private async Task<string> GenerateToken()
