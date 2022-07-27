@@ -11,8 +11,8 @@ namespace HotelListing.Data
 
         }
 
-        public DbSet<Hotel> Hotels { get; set; }
-        public DbSet<Country> Countries { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,8 +20,8 @@ namespace HotelListing.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
-            modelBuilder.ApplyConfiguration(new CountryConfiguration());
-            modelBuilder.ApplyConfiguration(new HotelConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new PostConfiguration());
         }
     }
 }

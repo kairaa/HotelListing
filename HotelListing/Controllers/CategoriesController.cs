@@ -15,12 +15,12 @@ namespace HotelListing.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CountriesController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly ICountriesRepository _countriesRepository;
+        private readonly ICategoriesRepository _countriesRepository;
 
-        public CountriesController(IMapper mapper, ICountriesRepository countriesRepository)
+        public CategoriesController(IMapper mapper, ICategoriesRepository countriesRepository)
         {
             _mapper = mapper;
             _countriesRepository = countriesRepository;
@@ -28,16 +28,16 @@ namespace HotelListing.Controllers
 
         // GET: api/Countries
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountries()
+        public async Task<ActionResult<IEnumerable<GetCategoryDto>>> GetCountries()
         {
             var countries = await _countriesRepository.GetAllAsync();
-            var countriesDto = _mapper.Map<List<GetCountryDto>>(countries);
+            var countriesDto = _mapper.Map<List<GetCategoryDto>>(countries);
             return Ok(countriesDto);
         }
 
         // GET: api/Countries/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CountryDto>> GetCountry(int id)
+        public async Task<ActionResult<CategoryDto>> GetCountry(int id)
         {
             var country = await _countriesRepository.GetDetails(id);
 
@@ -46,7 +46,7 @@ namespace HotelListing.Controllers
                 return NotFound();
             }
 
-            var countryDto = _mapper.Map<CountryDto>(country);
+            var countryDto = _mapper.Map<CategoryDto>(country);
 
             return Ok(countryDto);
         }
@@ -55,7 +55,7 @@ namespace HotelListing.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize(Roles ="Administrator, User")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCountry(int id, UpdateCountryDto updateCountryDto)
+        public async Task<IActionResult> PutCountry(int id, UpdateCategoryDto updateCountryDto)
         {
             if (id != updateCountryDto.Id)
             {
@@ -96,9 +96,9 @@ namespace HotelListing.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "Administrator, User")]
-        public async Task<ActionResult<Country>> PostCountry(CreateCountryDto createCountryDto)
+        public async Task<ActionResult<Category>> PostCountry(CreateCategoryDto createCountryDto)
         {
-            var country = _mapper.Map<Country>(createCountryDto);
+            var country = _mapper.Map<Category>(createCountryDto);
 
             await _countriesRepository.AddAsync(country);
 

@@ -1,6 +1,6 @@
 ﻿namespace HotelListing.Models.Hotel
 {
-    public class GetHotelDto : BaseHotelDto
+    public class UpdatePostDto : BasePostDto
     {
         public int Id { get; set; }
     }

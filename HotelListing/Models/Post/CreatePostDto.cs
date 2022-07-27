@@ -1,6 +1,6 @@
 ﻿namespace HotelListing.Models.Hotel
 {
-    public class CreateHotelDto : BaseHotelDto
+    public class CreatePostDto : BasePostDto
     {
     }
 }

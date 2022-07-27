@@ -1,6 +1,6 @@
 ﻿namespace HotelListing.Models.Country
 {
-    public class UpdateCountryDto : BaseCountryDto
+    public class GetCategoryDto : BaseCategoryDto
     {
         public int Id { get; set; }
     }

@@ -4,6 +4,7 @@ using HotelListing.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelListing.Migrations
 {
     [DbContext(typeof(HotelListingDbContext))]
-    partial class HotelListingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220727070348_PropertNamesChanged")]
+    partial class PropertNamesChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,7 +169,7 @@ namespace HotelListing.Migrations
                             ApiUserId = "ba073dce-0416-40d9-8a9c-e9372435c3f1",
                             CategoryId = 1,
                             Context = "This is first post in database",
-                            PostDate = new DateTime(2022, 7, 27, 10, 13, 11, 185, DateTimeKind.Local).AddTicks(8874),
+                            PostDate = new DateTime(2022, 7, 27, 10, 3, 47, 262, DateTimeKind.Local).AddTicks(3936),
                             Title = "Title of first post"
                         },
                         new
@@ -176,7 +178,7 @@ namespace HotelListing.Migrations
                             ApiUserId = "ba073dce-0416-40d9-8a9c-e9372435c3f1",
                             CategoryId = 2,
                             Context = "This is second post of kairaa in database",
-                            PostDate = new DateTime(2022, 7, 27, 10, 13, 11, 185, DateTimeKind.Local).AddTicks(8899),
+                            PostDate = new DateTime(2022, 7, 27, 10, 3, 47, 262, DateTimeKind.Local).AddTicks(3963),
                             Title = "Title of second post of kaira"
                         },
                         new
@@ -185,7 +187,7 @@ namespace HotelListing.Migrations
                             ApiUserId = "e2e74b3c-d858-4934-b76e-3df438f5fcba",
                             CategoryId = 1,
                             Context = "This is first post of ulas in database",
-                            PostDate = new DateTime(2022, 7, 27, 10, 13, 11, 185, DateTimeKind.Local).AddTicks(8905),
+                            PostDate = new DateTime(2022, 7, 27, 10, 3, 47, 262, DateTimeKind.Local).AddTicks(3969),
                             Title = "Title of first post of ulas"
                         });
                 });
@@ -219,15 +221,15 @@ namespace HotelListing.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0527b0cd-0787-4c48-a5cf-29190f06291c",
-                            ConcurrencyStamp = "1df788c5-7b62-43eb-a3c2-956f0390f237",
+                            Id = "9177b3d8-3341-4b3f-964f-794507b222cd",
+                            ConcurrencyStamp = "51fbecb2-5734-406f-8aa2-c4c8d883e1c1",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "d8765021-d3f2-499b-b742-4f1d2833b37d",
-                            ConcurrencyStamp = "477b1c27-d467-4d3d-a3ba-97cc27a71543",
+                            Id = "c17c9151-93ca-4806-acf9-50e93aba97b1",
+                            ConcurrencyStamp = "ae910464-d862-4c98-8695-fa892364c9ed",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -342,7 +344,7 @@ namespace HotelListing.Migrations
             modelBuilder.Entity("HotelListing.Data.Post", b =>
                 {
                     b.HasOne("HotelListing.Data.ApiUser", "ApiUser")
-                        .WithMany("Posts")
+                        .WithMany("Hotels")
                         .HasForeignKey("ApiUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -411,7 +413,7 @@ namespace HotelListing.Migrations
 
             modelBuilder.Entity("HotelListing.Data.ApiUser", b =>
                 {
-                    b.Navigation("Posts");
+                    b.Navigation("Hotels");
                 });
 
             modelBuilder.Entity("HotelListing.Data.Category", b =>

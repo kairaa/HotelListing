@@ -10,15 +10,15 @@ namespace HotelListing.Configuration
     {
         public MapperConfig()
         {
-            CreateMap<Country, CreateCountryDto>().ReverseMap();
-            CreateMap<Country, GetCountryDto>().ReverseMap();
-            CreateMap<Country, CountryDto>().ReverseMap();
-            CreateMap<Country, UpdateCountryDto>().ReverseMap();
+            CreateMap<Category, CreateCategoryDto>().ReverseMap();
+            CreateMap<Category, GetCategoryDto>().ReverseMap();
+            CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<Category, UpdateCategoryDto>().ReverseMap();
 
-            CreateMap<Hotel, CreateHotelDto>().ReverseMap();
-            CreateMap<Hotel, GetHotelDto>().ReverseMap();
-            CreateMap<Hotel, HotelDto>().ReverseMap();
-            CreateMap<Hotel, UpdateHotelDto>().ReverseMap();
+            CreateMap<Post, CreatePostDto>().ReverseMap();
+            CreateMap<Post, GetPostDto>().ReverseMap();
+            CreateMap<Post, PostDto>().ReverseMap();
+            CreateMap<Post, UpdatePostDto>().ReverseMap();
 
             CreateMap<ApiUser, ApiUserDto>().ReverseMap();
             CreateMap<ApiUser, GetApiUserDto>().ReverseMap();

@@ -4,21 +4,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing.Repository
 {
-    public class ApiUsersRepository : GenericRepository<ApiUser>, IApiUsersRepository
+    public class CategoriesRepository : GenericRepository<Category>, ICategoriesRepository
     {
         private readonly HotelListingDbContext _context;
 
-        public ApiUsersRepository(HotelListingDbContext context) : base(context)
+        public CategoriesRepository(HotelListingDbContext context) : base(context)
         {
-            this._context = context;
+            _context = context;
         }
 
-        public async Task<ApiUser> GetDetails(string id)
+        public async Task<Category> GetDetails(int id)
         {
             //throw new NotImplementedException();
-            return await _context.Users.Include(q => q.Posts)
+            return await _context.Categories.Include(q => q.Posts)
                 .FirstOrDefaultAsync(q => q.Id == id);
-            //return await _context.Users.Include(q => q.Hotels).
+            //return await _context.Countries.Include(q => q.Hotels).
             //    FirstOrDefaultAsync(q => q.Id == id);
         }
     }
