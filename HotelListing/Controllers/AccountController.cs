@@ -14,12 +14,14 @@ namespace HotelListing.Controllers
         private readonly IAuthManager _authManager;
         private readonly IMapper _mapper;
         private readonly IApiUsersRepository _apiUsersRepository;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAuthManager authManager, IMapper mapper, IApiUsersRepository apiUsersRepository)
+        public AccountController(IAuthManager authManager, IMapper mapper, IApiUsersRepository apiUsersRepository, ILogger<AccountController> logger)
         {
             this._authManager = authManager;
             this._mapper = mapper;
             this._apiUsersRepository = apiUsersRepository;
+            this._logger = logger;
         }
 
         // api/Account/register
@@ -30,17 +32,28 @@ namespace HotelListing.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Register([FromBody] ApiUserDto apiUserDto)
         {
+            _logger.LogInformation($"Registiration attemp for {apiUserDto.UserName}");
+
             var errors = await _authManager.Register(apiUserDto);
 
-            if (errors.Any())
+            try
             {
-                foreach(var error in errors)
+                if (errors.Any())
                 {
-                    ModelState.AddModelError(error.Code, error.Description);
+                    foreach (var error in errors)
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
+                    return BadRequest(ModelState);
                 }
-                return BadRequest(ModelState);
+                return Ok();
             }
-            return Ok();
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Something went wrong in the {nameof(Register)} - " +
+                    $"User registiration attemp for {apiUserDto.UserName}");
+                return Problem($"Something went wrong in the {nameof(Register)}", statusCode: 500);
+            }
         }
 
         [HttpPost]
@@ -50,13 +63,23 @@ namespace HotelListing.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
         {
-            var authResponse = await _authManager.Login(loginDto);
-
-            if (authResponse == null)
+            _logger.LogInformation($"Login attemp for {loginDto.UserName}");
+            try
             {
-                return Unauthorized();
+                var authResponse = await _authManager.Login(loginDto);
+
+                if (authResponse == null)
+                {
+                    return Unauthorized();
+                }
+                return Ok(authResponse);
             }
-            return Ok(authResponse);
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Something went wrong in the {nameof(Login)} - " +
+                    $"User registiration attemp for {loginDto.UserName}");
+                return Problem("$Something went wrong in the { nameof(Login)}", statusCode: 500);
+            }
         }
 
         [HttpPost]
