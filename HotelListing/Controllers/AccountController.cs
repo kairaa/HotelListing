@@ -36,24 +36,15 @@ namespace HotelListing.Controllers
 
             var errors = await _authManager.Register(apiUserDto);
 
-            try
+            if (errors.Any())
             {
-                if (errors.Any())
+                foreach (var error in errors)
                 {
-                    foreach (var error in errors)
-                    {
-                        ModelState.AddModelError(error.Code, error.Description);
-                    }
-                    return BadRequest(ModelState);
+                    ModelState.AddModelError(error.Code, error.Description);
                 }
-                return Ok();
+                return BadRequest(ModelState);
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Something went wrong in the {nameof(Register)} - " +
-                    $"User registiration attemp for {apiUserDto.UserName}");
-                return Problem($"Something went wrong in the {nameof(Register)}", statusCode: 500);
-            }
+            return Ok();
         }
 
         [HttpPost]
@@ -64,22 +55,14 @@ namespace HotelListing.Controllers
         public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
         {
             _logger.LogInformation($"Login attemp for {loginDto.UserName}");
-            try
-            {
-                var authResponse = await _authManager.Login(loginDto);
 
-                if (authResponse == null)
-                {
-                    return Unauthorized();
-                }
-                return Ok(authResponse);
-            }
-            catch (Exception e)
+            var authResponse = await _authManager.Login(loginDto);
+
+            if (authResponse == null)
             {
-                _logger.LogError(e, $"Something went wrong in the {nameof(Login)} - " +
-                    $"User registiration attemp for {loginDto.UserName}");
-                return Problem("$Something went wrong in the { nameof(Login)}", statusCode: 500);
+                return Unauthorized();
             }
+            return Ok(authResponse);
         }
 
         [HttpPost]

@@ -10,6 +10,7 @@ using HotelListing.Models.Country;
 using AutoMapper;
 using HotelListing.Contracts;
 using Microsoft.AspNetCore.Authorization;
+using HotelListing.Exceptions;
 
 namespace HotelListing.Controllers
 {
@@ -45,8 +46,7 @@ namespace HotelListing.Controllers
 
             if (country == null)
             {
-                _logger.LogWarning($"No record found in {nameof(GetCountry)} with id {id}");
-                return NotFound();
+                throw new NotFoundException(nameof(GetCountry), id);
             }
 
             var countryDto = _mapper.Map<CategoryDto>(country);
@@ -62,7 +62,7 @@ namespace HotelListing.Controllers
         {
             if (id != updateCountryDto.Id)
             {
-                return BadRequest("Invalid record Id");
+                throw new BadRequestException("Invalid record Id");
             }
 
             //_context.Entry(country).State = EntityState.Modified;
@@ -70,7 +70,7 @@ namespace HotelListing.Controllers
 
             if (country == null)
             {
-                return NotFound();
+                throw new NotFoundException(nameof(PutCountry), id);
             }
 
             _mapper.Map(updateCountryDto, country);
@@ -116,7 +116,7 @@ namespace HotelListing.Controllers
             var country = await _countriesRepository.GetAsync(id);
             if (country == null)
             {
-                return NotFound();
+                throw new NotFoundException(nameof(DeleteCountry), id);
             }
 
             await _countriesRepository.DeleteAsync(id);
