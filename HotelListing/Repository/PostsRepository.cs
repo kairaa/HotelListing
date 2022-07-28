@@ -4,13 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing.Repository
 {
-    public class HotelsRepository : GenericRepository<Post>, IPostsRepository
+    public class PostsRepository : GenericRepository<Post>, IPostsRepository
     {
         private readonly HotelListingDbContext _context;
 
-        public HotelsRepository(HotelListingDbContext context) : base(context)
+        public PostsRepository(HotelListingDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task<List<Post>> GetAllPostReverse()
+        {
+            return await _context.Set<Post>().OrderByDescending(q => q.PostDate).ToListAsync();
         }
 
         public async Task<Post> GetDetails(int id)

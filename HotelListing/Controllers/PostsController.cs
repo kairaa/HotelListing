@@ -17,65 +17,65 @@ namespace HotelListing.Controllers
     public class PostsController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IPostsRepository _hotelsRepository;
+        private readonly IPostsRepository _postsRepository;
 
-        public PostsController(IPostsRepository hotelsRepository, IMapper mapper)
+        public PostsController(IPostsRepository postsRepository, IMapper mapper)
         {
             _mapper = mapper;
-            _hotelsRepository = hotelsRepository;
+            _postsRepository = postsRepository;
         }
 
-        // GET: api/Hotels
+        // GET: api/Posts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetPostDto>>> GetHotels()
+        public async Task<ActionResult<IEnumerable<GetPostDto>>> GetPosts()
         {
-            var hotels = await _hotelsRepository.GetAllAsync();
-            var hotelsDto = _mapper.Map<List<GetPostDto>>(hotels);
-            return Ok(hotelsDto);
+            var posts = await _postsRepository.GetAllPostReverse();
+            var postsDto = _mapper.Map<List<GetPostDto>>(posts);
+            return Ok(postsDto);
         }
 
-        // GET: api/Hotels/5
+        // GET: api/Posts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PostDto>> GetHotel(int id)
+        public async Task<ActionResult<PostDto>> GetPost(int id)
         {
-            var hotel = await _hotelsRepository.GetDetails(id);
+            var post = await _postsRepository.GetDetails(id);
 
-            if (hotel == null)
+            if (post == null)
             {
                 return NotFound();
             }
 
-            var hotelDto = _mapper.Map<PostDto>(hotel);
+            var psotDto = _mapper.Map<PostDto>(post);
 
-            return Ok(hotelDto);
+            return Ok(psotDto);
         }
 
-        // PUT: api/Hotels/5
+        // PUT: api/Posts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutHotel(int id, UpdatePostDto updateHotelDto)
+        public async Task<IActionResult> PutPost(int id, UpdatePostDto updatePostDto)
         {
-            if (id != updateHotelDto.Id)
+            if (id != updatePostDto.Id)
             {
                 return BadRequest();
             }
 
-            var hotel = await _hotelsRepository.GetAsync(id);
+            var post = await _postsRepository.GetAsync(id);
 
-            if(hotel == null)
+            if(post == null)
             {
                 return NotFound();
             }
 
-            _mapper.Map(updateHotelDto, hotel);
+            _mapper.Map(updatePostDto, post);
 
             try
             {
-                await _hotelsRepository.UpdateAsync(hotel);
+                await _postsRepository.UpdateAsync(post);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await HotelExists(id))
+                if (!await PostExist(id))
                 {
                     return NotFound();
                 }
@@ -88,36 +88,36 @@ namespace HotelListing.Controllers
             return NoContent();
         }
 
-        // POST: api/Hotels
+        // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Post>> PostHotel(CreatePostDto createHotelDto)
+        public async Task<ActionResult<Post>> PostPost(CreatePostDto createPostDto)
         {
-            var hotel = _mapper.Map<Post>(createHotelDto);
+            var post = _mapper.Map<Post>(createPostDto);
 
-            await _hotelsRepository.AddAsync(hotel);
+            await _postsRepository.AddAsync(post);
 
-            return CreatedAtAction("GetHotel", new { id = hotel.Id }, hotel);
+            return CreatedAtAction("GetHotel", new { id = post.Id }, post);
         }
 
-        // DELETE: api/Hotels/5
+        // DELETE: api/Posts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteHotel(int id)
+        public async Task<IActionResult> DeletePost(int id)
         {
-            var hotel = await _hotelsRepository.GetAsync(id);
-            if (hotel == null)
+            var post = await _postsRepository.GetAsync(id);
+            if (post == null)
             {
                 return NotFound();
             }
 
-            await _hotelsRepository.DeleteAsync(id);
+            await _postsRepository.DeleteAsync(id);
 
             return NoContent();
         }
 
-        private async Task<bool> HotelExists(int id)
+        private async Task<bool> PostExist(int id)
         {
-            return await _hotelsRepository.Exist(id);
+            return await _postsRepository.Exist(id);
         }
     }
 }

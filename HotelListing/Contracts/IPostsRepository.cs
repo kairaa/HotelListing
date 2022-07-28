@@ -5,5 +5,7 @@ namespace HotelListing.Contracts
     public interface IPostsRepository : IGenericRepository<Post>
     {
         Task<Post> GetDetails(int id);
+
+        Task<List<Post>> GetAllPostReverse();
     }
 }

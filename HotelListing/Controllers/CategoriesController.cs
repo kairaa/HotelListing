@@ -19,69 +19,69 @@ namespace HotelListing.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly ICategoriesRepository _countriesRepository;
+        private readonly ICategoriesRepository _categoriesRepository;
         private readonly ILogger<CategoriesController> _logger;
 
-        public CategoriesController(IMapper mapper, ICategoriesRepository countriesRepository, ILogger<CategoriesController> logger)
+        public CategoriesController(IMapper mapper, ICategoriesRepository categoriesRepository, ILogger<CategoriesController> logger)
         {
             _mapper = mapper;
-            _countriesRepository = countriesRepository;
+            _categoriesRepository = categoriesRepository;
             this._logger = logger;
         }
 
-        // GET: api/Countries
+        // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetCategoryDto>>> GetCountries()
+        public async Task<ActionResult<IEnumerable<GetCategoryDto>>> GetCategories()
         {
-            var countries = await _countriesRepository.GetAllAsync();
-            var countriesDto = _mapper.Map<List<GetCategoryDto>>(countries);
-            return Ok(countriesDto);
+            var categories = await _categoriesRepository.GetAllAsync();
+            var categoriesDto = _mapper.Map<List<GetCategoryDto>>(categories);
+            return Ok(categoriesDto);
         }
 
-        // GET: api/Countries/5
+        // GET: api/Categories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CategoryDto>> GetCountry(int id)
+        public async Task<ActionResult<CategoryDto>> GetCategory(int id)
         {
-            var country = await _countriesRepository.GetDetails(id);
+            var category = await _categoriesRepository.GetDetails(id);
 
-            if (country == null)
+            if (category == null)
             {
-                throw new NotFoundException(nameof(GetCountry), id);
+                throw new NotFoundException(nameof(GetCategory), id);
             }
 
-            var countryDto = _mapper.Map<CategoryDto>(country);
+            var categoryDto = _mapper.Map<CategoryDto>(category);
 
-            return Ok(countryDto);
+            return Ok(categoryDto);
         }
 
-        // PUT: api/Countries/5
+        // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize(Roles ="Administrator, User")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCountry(int id, UpdateCategoryDto updateCountryDto)
+        public async Task<IActionResult> PutCategory(int id, UpdateCategoryDto updateCategoryDto)
         {
-            if (id != updateCountryDto.Id)
+            if (id != updateCategoryDto.Id)
             {
                 throw new BadRequestException("Invalid record Id");
             }
 
             //_context.Entry(country).State = EntityState.Modified;
-            var country = await _countriesRepository.GetAsync(id);
+            var category = await _categoriesRepository.GetAsync(id);
 
-            if (country == null)
+            if (category == null)
             {
-                throw new NotFoundException(nameof(PutCountry), id);
+                throw new NotFoundException(nameof(PutCategory), id);
             }
 
-            _mapper.Map(updateCountryDto, country);
+            _mapper.Map(updateCategoryDto, category);
 
             try
             {
-                await _countriesRepository.UpdateAsync(country);
+                await _categoriesRepository.UpdateAsync(category);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await CountryExists(id))
+                if (!await CategoryExists(id))
                 {
                     return NotFound();
                 }
@@ -95,38 +95,38 @@ namespace HotelListing.Controllers
             return NoContent();
         }
 
-        // POST: api/Countries
+        // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "Administrator, User")]
-        public async Task<ActionResult<Category>> PostCountry(CreateCategoryDto createCountryDto)
+        public async Task<ActionResult<Category>> PostCategory(CreateCategoryDto createCategoryDto)
         {
-            var country = _mapper.Map<Category>(createCountryDto);
+            var category = _mapper.Map<Category>(createCategoryDto);
 
-            await _countriesRepository.AddAsync(country);
+            await _categoriesRepository.AddAsync(category);
 
-            return CreatedAtAction("GetCountry", new { id = country.Id }, country);
+            return CreatedAtAction("GetCountry", new { id = category.Id }, category);
         }
 
-        // DELETE: api/Countries/5
+        // DELETE: api/Categories/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> DeleteCountry(int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
-            var country = await _countriesRepository.GetAsync(id);
-            if (country == null)
+            var category = await _categoriesRepository.GetAsync(id);
+            if (category == null)
             {
-                throw new NotFoundException(nameof(DeleteCountry), id);
+                throw new NotFoundException(nameof(DeleteCategory), id);
             }
 
-            await _countriesRepository.DeleteAsync(id);
+            await _categoriesRepository.DeleteAsync(id);
 
             return NoContent();
         }
 
-        private async Task<bool> CountryExists(int id)
+        private async Task<bool> CategoryExists(int id)
         {
-            return await _countriesRepository.Exist(id);
+            return await _categoriesRepository.Exist(id);
         }
     }
 }
